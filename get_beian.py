@@ -101,18 +101,18 @@ def do_request_beian(domain, verifyCode):
 
     # 解析 html，获取对应的值存入 dict 中
     soup = BeautifulSoup(html_context, "html.parser")
-    soup_msg = soup.find_all(name='td', attrs={'class': "bxy"})
-    soup.prettify()
-    icp_list = []
-    for content in soup_msg:
-        content = content.get_text()
-        content_out = "".join(content.split())
-        icp_list.append(content_out)
-    icp_info = {"name": icp_list[0], "nature": icp_list[1], "icp_number": icp_list[2],
-                "web_name": icp_list[3], "domain": icp_list[4], "check_data": icp_list[-2]}
-    return icp_info
-
-
+    try:
+        soup_msg = soup.find_all(name='td', attrs={'class': "bxy"})
+        icp_list = []
+        for content in soup_msg:
+            content = content.get_text()
+            content_out = "".join(content.split())
+            icp_list.append(content_out)
+        icp_info = {"name": icp_list[0], "nature": icp_list[1], "icp_number": icp_list[2],
+                    "web_name": icp_list[3], "domain": icp_list[4], "check_data": icp_list[-2]}
+        return icp_info
+    except IndexError:
+        return '未备案'
 if __name__ == '__main__':
 
     verify_code = str(get_verify_code()).upper()
