@@ -101,8 +101,8 @@ def do_request_beian(domain, verifyCode):
 
     # 解析 html，获取对应的值存入 dict 中
     soup = BeautifulSoup(html_context, "html.parser")
-    try:
-        soup_msg = soup.find_all(name='td', attrs={'class': "bxy"})
+    soup_msg = soup.find_all(name='td', attrs={'class': "bxy"})
+    if len(soup_msg):
         icp_list = []
         for content in soup_msg:
             content = content.get_text()
@@ -111,10 +111,11 @@ def do_request_beian(domain, verifyCode):
         icp_info = {"name": icp_list[0], "nature": icp_list[1], "icp_number": icp_list[2],
                     "web_name": icp_list[3], "domain": icp_list[4], "check_data": icp_list[-2]}
         return icp_info
-    except IndexError:
-        return '未备案'
+    print("未备案")
+
+
 if __name__ == '__main__':
 
     verify_code = str(get_verify_code()).upper()
-    if check_verify_code(verify_code) is True:
-        print(do_request_beian("awen.me", verify_code))
+    # if check_verify_code(verify_code) is True:
+    print(do_request_beian("qingchan.me", verify_code))
