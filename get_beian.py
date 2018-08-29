@@ -31,9 +31,10 @@ def get_verify_code():
     }
 
     response = requests_session.get(url, headers=headers)
-    if response.status_code == 200:
-        with open('code.jpg', 'wb') as file:
-            file.write(response.content)
+    if response.status_code != 200:
+        return
+    with open('code.jpg', 'wb') as file:
+        file.write(response.content)
     verifyCode = fateadm_api.TestFunc('code.jpg')
     return verifyCode
 
@@ -118,4 +119,4 @@ if __name__ == '__main__':
 
     verify_code = str(get_verify_code()).upper()
     # if check_verify_code(verify_code) is True:
-    print(do_request_beian("qingchan.me", verify_code))
+    print(do_request_beian("awen.me", verify_code))
